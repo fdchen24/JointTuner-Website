@@ -104,12 +104,12 @@
 
                   <!-- Github link -->
                   <span class="link-block">
-                    <a href="" target="_blank"
+                    <a href="https://github.com/fdchen24/JointTuner" target="_blank"
                     class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="fab fa-github"></i>
                     </span>
-                    <span>Code (Coming soon!)</span>
+                    <span>Code</span>
                   </a>
                 </span>
 
@@ -153,8 +153,8 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Recent text-to-video advancements have enabled coherent video synthesis from prompts and expanded to fine-grained control over appearance and motion. However, existing methods either suffer from concept interference due to feature domain mismatch caused by naive decoupled optimizations or exhibit appearance contamination induced by spatial feature leakage resulting from the entanglement of motion and appearance in reference video reconstructions. In this paper, we propose <b>JointTune</b>r, a novel adaptive joint training framework, to alleviate these issues. Specifically, we develop <b>Adaptive LoRA</b>, which incorporates a context-aware gating mechanism, and integrate the gated LoRA components into the spatial and temporal Transformers within the diffusion model. These components enable simultaneous optimization of appearance and motion, eliminating concept interference. In addition, we introduce the <b>Appearance-independent Temporal Loss</b>, which decouples motion patterns from intrinsic appearance in reference video reconstructions through an appearance-agnostic noise prediction task. The key innovation lies in adding frame-wise offset noise to the ground-truth Gaussian noise, perturbing its distribution, thereby disrupting spatial attributes associated with frames while preserving temporal coherence. Furthermore, we construct a benchmark comprising 90 appearance-motion customized combinations and 10 multi-type automatic metrics across four dimensions, facilitating a more comprehensive evaluation for this customization task. Extensive experiments demonstrate the superior performance of our method compared to current advanced approaches.          </p>
-        </div>
+          Recent advancements in customized video generation have led to significant improvements in the simultaneous adaptation of appearance and motion. While prior methods typically decouple appearance and motion training, the stage-wise strategy often introduces <i>concept interference</i>, resulting in inaccurate rendering of appearance features or motion patterns. Another challenge is <i>appearance contamination</i>, where background and foreground elements from reference videos distort the customized subject. In this work, we propose <b>JointTuner</b>, a novel framework that enables joint optimization of both appearance and motion components by leveraging two key innovations: <b>Synaptic Low-Rank Adaptation (Synaptic LoRA)</b> and <b>Appearance-independent Temporal Loss (AiT Loss)</b>. Synaptic LoRA introduces a <i>synaptic regulator</i>, implemented as a context-aware linear activation layer, to dynamically guide LoRA modules to focus on either subject appearance or motion patterns, thereby enabling consistent optimization across spatial and temporal dimensions. AiT Loss disrupts the gradient flow of appearance-related components, guiding the model to focus exclusively on motion learning and minimizing appearance interference. JointTuner is compatible with both UNet-based models (e.g., ZeroScope) and Diffusion Transformer-based models (e.g., CogVideoX), supporting the generation of longer and higher-quality customized videos. Additionally, we present a systematic evaluation framework for appearance-motion combined customization, covering 90 combinations evaluated along four critical dimensions: semantic alignment, motion dynamism, temporal consistency, and perceptual quality.
+          </p>
       </div>
     </div>
   </div>
@@ -182,9 +182,9 @@
   <div class="container is-max-desktop">
     <div class="hero-body has-text-centered">
       <h2 class="title is-3 has-text-centered">Method</h2>
-      <img src="static/images/Framework.png" alt="VideoMage" class="center-image" style="max-width: 100%; height: auto;" />
+      <img src="static/images/framework.png" alt="JointTuner" class="center-image" style="max-width: 100%; height: auto;" />
       <p class="has-text-centered has-text-justified" style="margin-bottom: -30px; font-size: 1.2rem; line-height: 1.3;">
-        <b>The architecture of our JointTuner</b>, an adaptive joint training framework, comprises three parts: (1) <b>Converting reference images into pseudo-videos</b> by duplicating frames to match the format of motion videos; (2) <b>Inserting Adaptive LoRA components</b> into the spatial and temporal Transformers for parameter-efficient fine-tuning; (3) <b>Optimizing Adaptive LoRA parameters with two specialized losses</b>: the One Frame Spatial Loss preserves appearance details, while the Appearance-independent Temporal Loss captures motion patterns. Notably, the pre-trained text-to-video diffusion model remains frozen during training, with only the injected LoRA parameters being fine-tuned. During inference, the trained LoRA weights are loaded to generate customized videos.
+      The architecture of <b>JointTuner</b>, an adaptive joint training framework with two main steps: (1) Inserting <b>Synaptic LoRA</b> into Transformers for efficient fine-tuning; (2) Optimizing <b>Synaptic LoRA</b> with two losses: the original diffusion loss maintains appearance details, while the <b>AiT Loss</b> focuses on motion patterns. The pre-trained text-to-video model is frozen, with only <b>Synaptic LoRA</b> parameters fine-tuned. During inference, the trained weights are used to generate customized videos.
       </p>
     </div>
   </div>
@@ -217,20 +217,90 @@
   <div class="hero-body has-text-centered">
     <div class="container is-max-desktop">
       <h2 class="title is-3 has-text-centered">
-      More Results on CogVideoX-2B <span style="color: red;">(new !)</span>
+      More Results on CogVideoX-5B
       </h2>
       <div id="results-carousel-2" class="carousel results-carousel">
         <div class="item item-video1">
           <video poster="" id="video1-1" autoplay controls muted loop height="100%">
             <!-- Your video file here -->
-            <source src="static/videos/cogvideox/bear-plushie.mp4"
+            <source src="static/videos/cogvideox-5b/bear_plushie_lifting_barbell.mp4"
             type="video/mp4">
           </video>
         </div>
         <div class="item item-video2">
           <video poster="" id="video2-2" autoplay controls muted loop height="100%">
             <!-- Your video file here -->
-            <source src="static/videos/cogvideox/pink-plushie.mp4"
+            <source src="static/videos/cogvideox-5b/bear_plushie_playing_flute.mp4"
+            type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video3">
+          <video poster="" id="video2-3" autoplay controls muted loop height="100%">
+            <!-- Your video file here -->
+            <source src="static/videos/cogvideox-5b/car_turning.mp4"
+            type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video4">
+          <video poster="" id="video2-4" autoplay controls muted loop height="100%">
+            <!-- Your video file here -->
+            <source src="static/videos/cogvideox-5b/clock_traveling.mp4"
+            type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video5">
+          <video poster="" id="video2-5" autoplay controls muted loop height="100%">
+            <!-- Your video file here -->
+            <source src="static/videos/cogvideox-5b/monster_toy_walking.mp4"
+            type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video6">
+          <video poster="" id="video2-6" autoplay controls muted loop height="100%">
+            <!-- Your video file here -->
+            <source src="static/videos/cogvideox-5b/pink_plushie_lifting_barbell.mp4"
+            type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video7">
+          <video poster="" id="video2-7" autoplay controls muted loop height="100%">
+            <!-- Your video file here -->
+            <source src="static/videos/cogvideox-5b/pink_plushie_playing_cello.mp4"
+            type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video8">
+          <video poster="" id="video2-8" autoplay controls muted loop height="100%">
+            <!-- Your video file here -->
+            <source src="static/videos/cogvideox-5b/pink_plushie_playing_flute.mp4"
+            type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video9">
+          <video poster="" id="video2-9" autoplay controls muted loop height="100%">
+            <!-- Your video file here -->
+            <source src="static/videos/cogvideox-5b/tortoise_plushie_lifting_barbell.mp4"
+            type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video10">
+          <video poster="" id="video2-10" autoplay controls muted loop height="100%">
+            <!-- Your video file here -->
+            <source src="static/videos/cogvideox-5b/tortoise_plushie_playing_flute.mp4"
+            type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video11">
+          <video poster="" id="video2-11" autoplay controls muted loop height="100%">
+            <!-- Your video file here -->
+            <source src="static/videos/cogvideox-5b/unicorn_toy_lifting_barbell.mp4"
+            type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video12">
+          <video poster="" id="video2-12" autoplay controls muted loop height="100%">
+            <!-- Your video file here -->
+            <source src="static/videos/cogvideox-5b/unicorn_toy_playing_cello.mp4"
             type="video/mp4">
           </video>
         </div>
@@ -244,7 +314,7 @@
 <section class="hero is-small">
   <div class="hero-body has-text-centered">
     <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Some Results on ZeroScope</h2>
+      <h2 class="title is-3 has-text-centered">More Results on ZeroScope</h2>
       <div id="results-carousel" class="carousel results-carousel">
         <div class="item item-video1">
           <video poster="" id="video1" autoplay controls muted loop height="100%">
